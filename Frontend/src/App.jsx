@@ -8,7 +8,6 @@ import Purchase from "./Pages/vouchers/Purchase"
 import SubForm from "./utils/SubForm"
 import Table from "./utils/Table"
 import HierarchyTable from "./utils/HierarchyTable"
-import DescriptiveListTable from "./utils/DescriptiveListTable"
 import Payment from "./Pages/vouchers/Payment.jsx";
 import BankAllocationSub from "./utils/BankAllocationSub.jsx";
 
@@ -31,7 +30,6 @@ function App() {
           <Route path="sales" element={<Sales />} />
           <Route path="table" element={<Table />} />
           <Route path="hier" element={<HierarchyTable />} />
-          <Route path="des" element={<DescriptiveListTable />} />
           <Route path="payment" element={<Payment />} />
           <Route path="bank"  element={<BankAllocationSub />} />
         </Routes>

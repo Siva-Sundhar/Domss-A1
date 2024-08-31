@@ -151,6 +151,7 @@ const Payment = () => {
 								))}
 							</tbody>
 						</table>
+                        
 					</div>
 				</div>
 			</div>

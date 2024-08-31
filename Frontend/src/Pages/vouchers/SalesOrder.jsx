@@ -15,10 +15,19 @@ const SalesOrder = () => {
 			dueOn: "",
 			quantity: "",
 			rate: "",
-			per: "",
+			uom: "",
 			discount: "",
 			amount: "",
-			allocation:[]},
+			allocation:[
+			{dueOn: "",
+            location: "",
+            batchNo: "",
+            quantity: "",
+            rate: "",
+            uom: "",
+            discount: "",
+            amount: "",}
+			]},
 	]);
 	const tableRefs = useRef([]);
 	const inputRefs = useRef([]);
@@ -82,18 +91,19 @@ const SalesOrder = () => {
 				dueOn: "",
 				quantity: "",
 				rate: "",
-				per: "",
+				uom: "",
 				discount: "",
 				amount: "",
 				allocation: [
 					{
 						dueOn: "",
 						location: "",
+						batchNo: "",
 						quantity: "",
 						rate: "",
-						per: "",
+						uom: "",
 						discount: "",
-						amount: ""
+						amount: "",
 					},
 				],
 			},
@@ -145,7 +155,7 @@ const SalesOrder = () => {
 		setShowProduct(false);
 		setShowSubForm(true);
 	};
-	
+	console.log(tableData)
 	return (
 		<>
 			<Title title="Order Voucher Creation" nav="/" />
@@ -346,6 +356,7 @@ const SalesOrder = () => {
 							orderData={tableData}
 							setOrderData={setTableData}
 							allocation={tableData[focusedRow].allocation}
+							row={focusedRow}
 						/>)}
 				</div>
 
