@@ -11,8 +11,12 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class SalesOrderController {
 
-    @Autowired
-    private SalesOrderService salesOrderService;
+
+    private final SalesOrderService salesOrderService;
+
+    public SalesOrderController(SalesOrderService salesOrderService) {
+        this.salesOrderService = salesOrderService;
+    }
 
     @PostMapping("save")
     public ResponseEntity<SalesOrder> saveSaleOrder(@RequestBody SalesOrder order){

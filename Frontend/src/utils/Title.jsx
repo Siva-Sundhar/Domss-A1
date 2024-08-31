@@ -2,7 +2,7 @@ import { HiXMark } from "react-icons/hi2";
 import { useNavigate } from "react-router-dom";
 import PropTypes from "prop-types";
 
-const Title = ({ title }) => {
+const Title = ({ title, nav }) => {
 	const navigate = useNavigate();
 	return (
 		<>
@@ -10,7 +10,7 @@ const Title = ({ title }) => {
 				<h1 className="text-[11px] pl-2 font-bold">{title}</h1>
 				<HiXMark
 					className=" font-semibold cursor-pointer"
-					onClick={() => navigate("/")}
+					onClick={() => navigate(nav)}
 				/>
 			</div>
 		</>
@@ -19,4 +19,5 @@ const Title = ({ title }) => {
 export default Title;
 Title.propTypes = {
 	title: PropTypes.string.isRequired,
+	nav: PropTypes.string.isRequired,
 };

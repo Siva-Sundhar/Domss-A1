@@ -2,10 +2,12 @@ import { useRef, useState } from "react";
 import Title from "../../utils/Title";
 import Header from "../../utils/Header";
 import SelectArea from "../../utils/SelectArea";
+import HierarchyTable from "../../utils/HierarchyTable";
+// import ProductSelectArea from "../../utils/ProductSelectArea";
 
 const SalesOrder = () => {
-	
-	const [showProduct, setShowProduct] = useState(false)
+	const [showProduct, setShowProduct] = useState(false);
+	const [showSubForm, setShowSubForm] = useState(false);
 	const [tableData, setTableData] = useState([
 		{
 			productCode: "",
@@ -16,27 +18,26 @@ const SalesOrder = () => {
 			per: "",
 			discount: "",
 			amount: "",
-		},
+			allocation:[]},
 	]);
 	const tableRefs = useRef([]);
 	const inputRefs = useRef([]);
-
+	const [selectionItem, setSelectionItem] = useState("");
 	const [headerData, setHeaderData] = useState({
 		customerName: "",
 		currentBalance1: "",
-		orderNo: ""
-	})
+		orderNo: "",
+	});
 	const [narration, setNarration] = useState("");
-	
-	const [stockItem, setStockItem] = useState([
+	const [stockItem] = useState([
 		{ productCode: 10001, label: "Aquafina 1L", quantity: 40 },
 		{ productCode: 10002, label: "Kinley 1L", quantity: 40 },
 		{ productCode: 10003, label: "Bislery 1L", quantity: 40 },
 		{ productCode: 10004, label: "Baily 1L", quantity: 40 },
 		{ productCode: 10005, label: "Himalayan 1L", quantity: 40 },
-		
 	]);
-	
+	const [selectedProduct, setSelectedProduct] = useState(0);
+	const [focusedRow, setFocusedRow] = useState(null)
 
 	const handleInputChange = (e, rowIndex) => {
 		const { value, name } = e.target;
@@ -44,7 +45,7 @@ const SalesOrder = () => {
 		updatedData[rowIndex][name] = value;
 		setTableData(updatedData);
 	};
-	
+
 	const handleKeyDown = (e, rowIndex, colIndex) => {
 		if (e.key === "Enter" && e.target.value.trim() !== "") {
 			e.preventDefault();
@@ -56,16 +57,16 @@ const SalesOrder = () => {
 				// add new row when reach last row
 				if (rowIndex === tableData.length - 1) {
 					addRow();
-				//
+					//
 				} else {
 					tableRefs.current[(rowIndex + 1) * 8]?.focus();
 				}
 			}
-		} else if(e.key === 'Backspace'){
+		} else if (e.key === "Backspace") {
 			const prevCell = rowIndex * 8 + colIndex - 1;
-			if(e.target.value.trim() !== ""){
+			if (e.target.value.trim() !== "") {
 				return;
-			} else if(prevCell >= 0 ){
+			} else if (prevCell >= 0) {
 				e.preventDefault();
 				tableRefs.current[prevCell]?.focus();
 				tableRefs.current[prevCell].setSelectionRange(0, 0);
@@ -84,6 +85,17 @@ const SalesOrder = () => {
 				per: "",
 				discount: "",
 				amount: "",
+				allocation: [
+					{
+						dueOn: "",
+						location: "",
+						quantity: "",
+						rate: "",
+						per: "",
+						discount: "",
+						amount: ""
+					},
+				],
 			},
 		]);
 		setTimeout(() => {
@@ -91,28 +103,52 @@ const SalesOrder = () => {
 			tableRefs.current[rowIndex * 8]?.focus();
 		}, 0);
 	};
-	const handleFormSubmit = ()=>{
+	const handleFormSubmit = () => {
 		const customerName = headerData.customerName;
-		const ledger = headerData.salesLedger
-		const orderNo = headerData.orderNo
-		const data =  {
+		const ledger = headerData.salesLedger;
+		const orderNo = headerData.orderNo;
+		const data = {
 			customerName,
 			ledger,
 			orderNo,
 			tableData,
-			narration
+			narration,
+		};
+		console.log(data);
+	};
+	const handleSelect = (e, item, rowIndex) => {
+		if (selectedProduct < stockItem.length) {
+			if (e.key === "ArrowUp" && selectedProduct > 0) {
+				setSelectedProduct((prev) => prev - 1);
+			} else if (
+				e.key === "ArrowDown" &&
+				selectedProduct < stockItem.length - 1
+			) {
+				setSelectedProduct((prev) => prev + 1);
+			} else if (e.key === "Enter" && selectedProduct >= 0) {
+				onSelected(item[selectedProduct], rowIndex);
+				// tableRefs.current[0].focus();
+			} else if (e.key === "Backspace") {
+				if (e.target.value !== "") {
+					return;
+				} else {
+					e.preventDefault();
+					inputRefs.current[1]?.focus();
+				}
+			}
 		}
-		console.log(data)
-	}
-
-  const handleClick = (item) =>{
-    
-  }
+	};
+	const onSelected = (item, rowIndex) => {
+		const updatedTable = [...tableData];
+		updatedTable[rowIndex].productCode = item.label;
+		setSelectionItem(item.label);
+		setShowProduct(false);
+		setShowSubForm(true);
+	};
 	
-
 	return (
 		<>
-			<Title title="Order Voucher Creation" />
+			<Title title="Order Voucher Creation" nav="/" />
 			<form action="" className="relative" onSubmit={(e) => e.preventDefault()}>
 				<Header
 					title="Sales Order"
@@ -163,32 +199,34 @@ const SalesOrder = () => {
 									<td className="text-center border border-slate-300 bg-white">
 										{rowIndex + 1}
 									</td>
-									<td className="text-center border border-slate-300 bg-white  ">
+									<td className="text-center border border-slate-300 bg-white">
 										<input
 											ref={(input) =>
 												(tableRefs.current[rowIndex * 8 + 0] = input)
 											}
 											onChange={(e) => handleInputChange(e, rowIndex)}
 											type="text"
-											className="w-full outline-0 "
+											className="w-full outline-0"
 											name="productCode"
 											value={item.productCode}
-											onKeyDown={(e) => handleKeyDown(e, rowIndex, 0)}
-											onFocus={()=> setShowProduct(true)}
-											onBlur={()=> setShowProduct(false)}
+											onKeyDown={(e) => handleSelect(e, stockItem, rowIndex)}
+											onFocus={() => {
+												setShowProduct(true)
+												setFocusedRow(rowIndex)
+											}}
+											onBlur={() => setShowProduct(false)}
 										/>
-										{
-											showProduct && (
-                        
-												<SelectArea 
-                          title="List of Stock Items"
-                          data={stockItem}
-                          onHandle={handleClick}
-                        />
-                        
-											)
-										}
+										{showProduct && (
+											<SelectArea
+												title="List of Stock Items"
+												selectIndex={selectedProduct}
+												data={stockItem}
+												onHandle={onSelected}
+												allocations={item.allocation}
+											/>
+										)}
 									</td>
+
 									<td className="text-center border border-slate-300 bg-white">
 										<input
 											onChange={(e) => handleInputChange(e, rowIndex)}
@@ -228,10 +266,10 @@ const SalesOrder = () => {
 											onKeyDown={(e) => handleKeyDown(e, rowIndex, 3)}
 										/>
 									</td>
-									<td className="text-center border border-slate-300 bg-white">
+									<td className=" border border-slate-300 bg-white">
 										<input
 											onChange={(e) => handleInputChange(e, rowIndex)}
-											className="w-full outline-0"
+											className="w-full outline-0 text-right"
 											type="text"
 											name="rate"
 											value={item.rate}
@@ -280,10 +318,10 @@ const SalesOrder = () => {
 											onKeyDown={(e) => handleKeyDown(e, rowIndex, 7)}
 										/>
 									</td>
-									<td className="text-center border border-slate-300 bg-white cursor-default">
+									<td className=" border border-slate-300 bg-white cursor-default">
 										<input
 											onChange={(e) => handleInputChange(e, rowIndex)}
-											className="w-full outline-0"
+											className="w-full outline-0 text-right"
 											type="text"
 											name="amount"
 											value={item.amount}
@@ -293,18 +331,31 @@ const SalesOrder = () => {
 											onKeyDown={(e) => handleKeyDown(e, rowIndex, 8)}
 										/>
 									</td>
+
 								</tr>
+
 							))}
+
 						</tbody>
+
 					</table>
+					{showSubForm && (
+						<HierarchyTable
+							isClose={setShowSubForm}
+							selectionItem={selectionItem}
+							orderData={tableData}
+							setOrderData={setTableData}
+							allocation={tableData[focusedRow].allocation}
+						/>)}
 				</div>
+
 				<div className="flex justify-between">
 					<div className=" flex flex-col">
 						<label htmlFor="narration" className="text-[14px] pl-1">
 							Narration :
 						</label>
 						<textarea
-							type="text"
+							// type="text"
 							name="narration"
 							value={narration}
 							onChange={(e) => setNarration(e.target.value)}
@@ -324,6 +375,7 @@ const SalesOrder = () => {
 						Total
 					</div>
 				</div>
+
 			</form>
 		</>
 	);

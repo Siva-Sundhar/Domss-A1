@@ -1,7 +1,7 @@
 import PropTypes from "prop-types";
 import { useEffect } from "react";
 import { useRef } from "react";
-const SelectArea = ({title, data, selectIndex, onHandle }) => {
+const SelectArea = ({title, data, selectIndex, onHandle, extraParams}) => {
 	const listRef = useRef([]);
 
 	useEffect(() => {
@@ -14,6 +14,14 @@ const SelectArea = ({title, data, selectIndex, onHandle }) => {
 		}
 	}, [selectIndex]);
 
+	const handleClickItem = (item)=>{
+		if(typeof onHandle === 'function'){
+			onHandle(item, extraParams);
+		} else {
+			onHandle(item);
+		}
+	}
+	// console.log(...extraParams)
 	return (
 		<>
 			<div className="absolute top-0 right-0 bg-[#def1fc] w-[300px] border border-slate-500 z-10 h-[625px]">
@@ -32,7 +40,7 @@ const SelectArea = ({title, data, selectIndex, onHandle }) => {
 								selectIndex === index ? "bg-[#ff9a00]" : ""
 							}`}
 							onClick={() => {
-								onHandle(item.label);
+								handleClickItem(item.label);
 								// refs.current[1].focus();
 							}}
 							ref={(el) => (listRef.current[index] = el)}
@@ -51,7 +59,6 @@ SelectArea.propTypes = {
 	title:PropTypes.string.isRequired,
 	data: PropTypes.arrayOf(PropTypes.object).isRequired,
 	selectIndex: PropTypes.number.isRequired,
-	// tableRefs: PropTypes.object.isRequired,
 	onHandle: PropTypes.func.isRequired,
-	// selectionKey: PropTypes.string.isRequired
+	extraParams:PropTypes.any
 };

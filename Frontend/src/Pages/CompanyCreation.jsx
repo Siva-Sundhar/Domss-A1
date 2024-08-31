@@ -194,7 +194,7 @@ const CompanyCreation = () => {
 	};
 	return (
 		<>
-			<Title title="Company Creation" />
+			<Title title="Company Creation" nav="/"/>
 
 			<form
 				action=""

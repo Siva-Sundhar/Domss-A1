@@ -29,7 +29,7 @@ const Header = ({ title, inputRefs, data, setData, tableRefs}) => {
 				setSelectIndex((prev) => prev + 1);
 			} else if (e.key === "Enter" && selectIndex >= 0) {
 				if (data === customerName) {
-					updateData("customerName",data[selectIndex].label);
+					updateData(data[selectIndex].label);
 					setShowCustomer(false);
 					inputRefs.current[1]?.focus();
 				} 
@@ -45,11 +45,13 @@ const Header = ({ title, inputRefs, data, setData, tableRefs}) => {
 			}
 		}
 	};
-	const updateData = (key, value) => {
+	const updateData = (value) => {
 		setData((prevData) => ({
 			...prevData,
-			[key]: value,
+			customerName: value,
 		}));
+		inputRefs.current[1]?.focus();
+		setShowCustomer(false)
 	};
 
 	return (

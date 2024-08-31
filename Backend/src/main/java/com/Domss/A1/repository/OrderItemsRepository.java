@@ -1,7 +1,7 @@
 package com.Domss.A1.repository;
 
-import com.Domss.A1.entity.OrderItems;
+import com.Domss.A1.entity.OrderItem;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-public interface OrderItemsRepository extends JpaRepository<OrderItems, Long> {
+public interface OrderItemsRepository extends JpaRepository<OrderItem, Long> {
 }
