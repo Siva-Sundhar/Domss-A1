@@ -14,11 +14,11 @@ const SelectArea = ({title, data, selectIndex, onHandle, extraParams}) => {
 		}
 	}, [selectIndex]);
 
-	const handleClickItem = (item)=>{
+	const handleClickItem = (e,item)=>{
 		if(typeof onHandle === 'function'){
-			onHandle(item, extraParams);
+			onHandle(e, item, extraParams);
 		} else {
-			onHandle(item);
+			onHandle(e,item);
 		}
 	}
 	// console.log(...extraParams)
@@ -36,16 +36,16 @@ const SelectArea = ({title, data, selectIndex, onHandle, extraParams}) => {
 						<li
 							key={index}
 							tabIndex="0"
-							className={`pl-2 h-[17px] flex items-center py-0.5 cursor-pointer text-sm ${
+							className={`px-2 h-[17px] flex justify-between items-center py-0.5  cursor-pointer text-sm ${
 								selectIndex === index ? "bg-[#ff9a00]" : ""
 							}`}
-							onClick={() => {
-								handleClickItem(item.label);
+							onClick={(e) => {
+								handleClickItem(e,item);
 								// refs.current[1].focus();
 							}}
 							ref={(el) => (listRef.current[index] = el)}
 						>
-							{item.label}
+							<span>{item.label}</span> {item.quantity && (item.quantity+" Nos")}
 						</li>
 					))}
 				</ul>

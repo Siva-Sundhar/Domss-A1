@@ -11,12 +11,17 @@ const Header = ({ title, inputRefs, data, setData, tableRefs}) => {
 		{ label: "Tnpl Ltd" },
 		{ label: "Jsw" },
 	]);
+	const [filteredCustomer, setFilteredCustomer] = useState(customerName)
 	
 	const handleChange = (e)=>{
 		const {name, value} = e.target;
 		setData((prevData) => ({ ...prevData, [name]: value }));
+		if(name === 'customerName'){
+			const filteredData = customerName.filter((cust)=> cust.label.toLowerCase().includes(value))
+		setFilteredCustomer(filteredData)
+		}
 	}
-
+	
 	const handleSelect = (e, data) => {
 		
 		if (selectIndex < data.length) {
@@ -29,26 +34,26 @@ const Header = ({ title, inputRefs, data, setData, tableRefs}) => {
 				setSelectIndex((prev) => prev + 1);
 			} else if (e.key === "Enter" && selectIndex >= 0) {
 				if (data === customerName) {
-					updateData(data[selectIndex].label);
+					updateData(e,data[selectIndex]);
 					setShowCustomer(false);
 					inputRefs.current[1]?.focus();
+					inputRefs.current[1].setSelectionRange(0,0)
 				} 
 				// tableRefs.current[0].focus();
 			} else if (e.key === "Backspace") {
 				if (e.target.value !== "") {
 					return;
 				} else {
-					
 					e.preventDefault();
-					inputRefs.current[1]?.focus();
+					inputRefs.current[0]?.focus();
 				}
 			}
 		}
 	};
-	const updateData = (value) => {
+	const updateData = (e,value) => {
 		setData((prevData) => ({
 			...prevData,
-			customerName: value,
+			customerName: value.label,
 		}));
 		inputRefs.current[1]?.focus();
 		setShowCustomer(false)
@@ -83,18 +88,19 @@ const Header = ({ title, inputRefs, data, setData, tableRefs}) => {
 								autoFocus
 								onKeyDown={(e) => handleSelect(e, customerName)}
 								onFocus={() => setShowCustomer(true)}
-								onBlur={() => setShowCustomer(false)}
+								onBlur={() => {
+									setShowCustomer(false);
+									// setData((prevData) => ({ ...prevData, orderNo: e.target.value }));
+								}}
 								id="custNo"
 								className="w-60 border border-transparent h-[18px] focus:bg-[#fee8af] focus:border-blue-500 text-[13px] pl-0.5 bg-transparent outline-0 font-semibold"
 							/>
 							{ShowCustomer && (
-								
 								<SelectArea
 									title={"List of Ledger Accounts"}
-									data={customerName}
+									data={filteredCustomer}
 									selectIndex={selectIndex}
 									onHandle={updateData}
-									
 								/>
 							)}
 						</div>
@@ -107,7 +113,6 @@ const Header = ({ title, inputRefs, data, setData, tableRefs}) => {
 							</label>
 							<div className="mr-0.5 text-slate-500">:</div>
 						</div>
-						
 					</div>
 				</div>
 				<div className="pt-1 flex flex-col px-1">
@@ -125,11 +130,20 @@ const Header = ({ title, inputRefs, data, setData, tableRefs}) => {
 							onChange={handleChange}
 							name="orderNo"
 							ref={(el) => (inputRefs.current[1] = el)}
-							onKeyDown={e => {
-								if (e.key === 'Enter' && e.target.value !== "") {
+							onKeyDown={(e) => {
+								if (e.key === "Enter") {
 									e.preventDefault();
 									tableRefs.current[0]?.focus();
-							}}}
+								} else if (e.key === "Backspace") {
+									if (e.target.value !== "") {
+										return;
+									} else {
+										e.preventDefault();
+										inputRefs.current[0]?.focus();
+										inputRefs.current[0].setSelectionRange(0,0)
+									}
+								}
+							}}
 							className="outline-0 border border-transparent font-semibold pl-0.5 h-[18px] focus:bg-[#fee8af] focus:border focus:border-blue-500 text-[13px]"
 						/>
 					</div>

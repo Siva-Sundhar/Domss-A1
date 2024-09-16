@@ -20,14 +20,11 @@ public class SalesOrder {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String voucherNo;
-    private String partyName;
+    private String customerName;
     private String orderNo;
-
-    @OneToMany( cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(name = "sales_order_id")
-    private List<OrderItem> orderItems = new ArrayList<>();
-
+    private List<OrderItem> orderItem = new ArrayList<>();
     private String narration;
 
 //    public void addOrderItem(OrderItem item) {

@@ -9,7 +9,9 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -24,10 +26,10 @@ public class OrderItem {
 
     private String productCode;
     private String description;
-    private LocalDate dueDate;
+    private String dueDate;
     private Double quantity;
     private Double rate;
-    private String per;
+    private String uom;
     private Double discount;
     private Double amount;
 
@@ -38,7 +40,7 @@ public class OrderItem {
 
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(name = "order_item_id")
-    private Set<BatchWiseItem> batchWiseItems = new HashSet<>();
+    private List<BatchWiseItem> batchWiseItem = new ArrayList<>();
 
 //    public void setSalesOrder(SalesOrder salesOrder) {
 //        this.salesOrder = salesOrder;

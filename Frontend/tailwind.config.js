@@ -7,5 +7,19 @@ export default {
   theme: {
     extend: {},
   },
-  plugins: [],
+  plugins: [
+    function({ addBase }) {
+      addBase({
+        'input[type="number"]::-webkit-outer-spin-button': {
+          '@apply appearance-none': {},
+        },
+        'input[type="number"]::-webkit-inner-spin-button': {
+          '@apply appearance-none': {},
+        },
+        'input[type="number"]': {
+          '@apply appearance-none': {},
+        },
+      });
+    },
+  ],
 }
