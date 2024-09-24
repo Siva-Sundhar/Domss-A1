@@ -10,6 +10,7 @@ import Table from "./utils/Table"
 import HierarchyTable from "./utils/HierarchyTable"
 import Payment from "./Pages/vouchers/Payment.jsx";
 import BankAllocationSub from "./utils/BankAllocationSub.jsx";
+import PaymentSub from "./Pages/PaymentSub.jsx"
 
 
 
@@ -32,6 +33,7 @@ function App() {
           <Route path="hier" element={<HierarchyTable />} />
           <Route path="payment" element={<Payment />} />
           <Route path="bank"  element={<BankAllocationSub />} />
+          <Route path="paySub" element={<PaymentSub />} />
         </Routes>
       </BrowserRouter>
     </>
