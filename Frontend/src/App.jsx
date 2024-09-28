@@ -5,12 +5,14 @@ import PurchaseOrder from "./Pages/vouchers/PurchaseOrder"
 import Sales from "./Pages/vouchers/Sales"
 import SalesOrder from "./Pages/vouchers/SalesOrder"
 import Purchase from "./Pages/vouchers/Purchase"
-import SubForm from "./utils/SubForm"
+// import SubForm from "./utils/SubForm"
 import Table from "./utils/Table"
 import HierarchyTable from "./utils/HierarchyTable"
 import Payment from "./Pages/vouchers/Payment.jsx";
 import BankAllocationSub from "./utils/BankAllocationSub.jsx";
-import PaymentSub from "./Pages/PaymentSub.jsx"
+import SubForm from "./Pages/SubForm.jsx"
+import Receipt from "./Pages/vouchers/Receipt.jsx"
+import Journal from "./Pages/vouchers/Journal.jsx"
 
 
 
@@ -33,7 +35,9 @@ function App() {
           <Route path="hier" element={<HierarchyTable />} />
           <Route path="payment" element={<Payment />} />
           <Route path="bank"  element={<BankAllocationSub />} />
-          <Route path="paySub" element={<PaymentSub />} />
+          <Route path="paySub" element={<SubForm />} />
+          <Route path="receipt" element={<Receipt />} />
+          <Route path="journal" element={<Journal />} />
         </Routes>
       </BrowserRouter>
     </>
