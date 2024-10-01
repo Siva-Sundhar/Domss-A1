@@ -1,41 +1,25 @@
 import Title from "../../utils/Title.jsx";
 // import SelectArea from "../../utils/SelectArea.jsx";
 import React, { useRef, useState } from "react";
-import PaySub from "../PaySub.jsx";
 
-const Receipt = () => {
-	const acountRef = useRef(null)
-	const narrationRef = useRef(null)
+const Contra = () => {
+	const acountRef = useRef(null);
+	const narrationRef = useRef(null);
 	const inputRefs = useRef([]);
-  const [showAccountLedger, setshowAccountLedger] = useState(false);
-	const [accountName, setAccountName] = useState("")
-  const [narration, setNarration] = useState("")
-  const [accountLedger] = useState([
-    {ledger:"Cash"},
-    {ledger:"Bank"},
-  ])
+	const [showAccountLedger, setshowAccountLedger] = useState(false);
+	const [accountName, setAccountName] = useState("");
+	const [narration, setNarration] = useState("");
 	const [supplier, setSupplier] = useState([
 		{
 			name: "",
 			amount: "",
-			billWise: [
-				{
-					reference: "",
-					date:"",
-					name: "",
-					creditDays: "",
-					forexCurrencyType: "",
-					forexAmount: "",
-					exchangeRate: "",
-					amount: "",
-					creditOrDebit: "Dr",
-				},
-			],
+			
 		},
 	]);
 	const [total, setTotal] = useState("");
-	const [isOpen, setIsOpen] = useState(false)
-	const [focusedIndex, setFocusedIndex] = useState(null)
+	const [accountLedger] = useState([{ ledger: "Cash" }, { ledger: "Bank" }]);
+	// const [isOpen, setIsOpen] = useState(false);
+	const [focusedIndex, setFocusedIndex] = useState(null);
 	const [nameBlurred, setNameBlurred] = useState(
 		Array(supplier.length).fill(false)
 	);
@@ -43,21 +27,21 @@ const Receipt = () => {
 		Array(supplier.length).fill(false)
 	);
 	const [ledgers] = useState([
-		{ledger:"Comic Stan"},
-		{ledger:"Super Nova"},
-		{ledger:"Blue Moon"},
-		{ledger:"Bumble bee"},
-		{ledger:"Megatron"},
-	])
+		{ ledger: "Cash" },
+		{ ledger: "Sbi" },
+		{ ledger: "Iob" },
+		{ ledger: "Cub" },
 
-	const display = supplier.length > 1 ? [{ledger:"♦ End of List"}, ...ledgers] : ledgers;
-
+		
+	]);
+	const display =
+		supplier.length > 1 ? [{ ledger: "♦ End of List" }, ...ledgers] : ledgers;
 	const handleNameBlur = (index) => {
 		const updatedBlurred = [...nameBlurred];
 		updatedBlurred[index] = true;
 		setNameBlurred(updatedBlurred);
 	};
-	const [selectIndex, setSelectIndex] = useState(0)
+	const [selectIndex, setSelectIndex] = useState(0);
 	const handleAmountBlur = (index) => {
 		const updatedBlurred = [...amountBlurred];
 		updatedBlurred[index] = true;
@@ -67,126 +51,128 @@ const Receipt = () => {
 		const { name, value } = e.target;
 		const updateData = [...supplier];
 		updateData[rowIndex][name] = value;
-		if(name === 'amount' && updateData[rowIndex].billWise){
-			updateData[rowIndex].billWise.forEach((bill)=>{
-				bill.amount = value
-			});
-		}
+		// if (name === "amount" && updateData[rowIndex].billWise) {
+		// 	updateData[rowIndex].billWise.forEach((bill) => {
+		// 		bill.amount = value;
+		// 	});
+		// }
 		setSupplier(updateData);
-
 	};
-	const [showLedger, setShowLedger] = useState(false)
-	const inputFocusKey = (e, rowIndex, colIndex) =>{
+	const [showLedger, setShowLedger] = useState(false);
+	const inputFocusKey = (e, rowIndex, colIndex) => {
 		const key = e.key;
-		if(key === 'Enter'){
+		if (key === "Enter") {
 			e.preventDefault();
 			const nextField = rowIndex * 2 + colIndex + 1;
-			if(inputRefs.current[nextField] && nextField < inputRefs.current.length){
+			if (
+				inputRefs.current[nextField] &&
+				nextField < inputRefs.current.length
+			) {
 				inputRefs.current[nextField]?.focus();
-			} else if(rowIndex === supplier.length - 1){
+			} else if (rowIndex === supplier.length - 1) {
 				addNewRow();
 			}
 		}
-	}
-	const addNewRow = ()=>{
+	};
+	const addNewRow = () => {
 		setSupplier((prev) => [
 			...prev,
 			{
 				name: "",
 				amount: "",
-				billWise: [
-					{
-						reference: "",
-						name: "",
-						creditDays: "",
-						forexAmount: "",
-						exchangeRate: "",
-						amount: "",
-						creditOrDebit: "Dr",
-					},
-				],
 			},
 		]);
-			const rowIndex = supplier.length;
-			inputRefs.current[rowIndex * 2]?.focus();
-	}
-	const numberFormat = (e, rowIndex)=> {
-		const {name, value} = e.target;
-		const cleanNumber = typeof item === 'number' ? value : parseFloat(value.replace(/,/g, ""));
-		if(isNaN(cleanNumber)) return "";
+        setTimeout(() => { 
+            const rowIndex = supplier.length;
+            inputRefs.current[rowIndex * 2]?.focus();
+        }, 0)
+	};
+	const numberFormat = (e, rowIndex) => {
+		const { name, value } = e.target;
+		const cleanNumber =
+			typeof item === "number" ? value : parseFloat(value.replace(/,/g, ""));
+		if (isNaN(cleanNumber)) return "";
 
 		const result = new Intl.NumberFormat("en-IN", {
 			maximumFractionDigits: 2,
 			minimumFractionDigits: 2,
-		}).format(cleanNumber)
-		const updated = [...supplier]
+		}).format(cleanNumber);
+		const updated = [...supplier];
 		updated[rowIndex][name] = result;
-		if(name === 'amount' && updated[rowIndex].billWise){
-			updated[rowIndex].billWise.forEach((bill)=>{
-				bill.amount = result
+		if (name === "amount" && updated[rowIndex].billWise) {
+			updated[rowIndex].billWise.forEach((bill) => {
+				bill.amount = result;
 			});
 		}
 		setSupplier(updated);
-	}
-	const handleSelect = (e, rowIndex, item)=>{
+	};
+	const handleSelect = (e, rowIndex, item) => {
 		const key = e.key;
-		if(selectIndex < ledgers.length){
-			if(key === 'ArrowUp' && selectIndex > 0){
-				setSelectIndex(prev => prev - 1);
-			} else if(key === 'ArrowDown' && selectIndex < ledgers.length - 1){
-				setSelectIndex(prev => prev + 1);
-			} else if(key === 'Enter'){
-				e.preventDefault()
-				onSelect(item[selectIndex].ledger, rowIndex)
+		if (selectIndex < ledgers.length) {
+			if (key === "ArrowUp" && selectIndex > 0) {
+				setSelectIndex((prev) => prev - 1);
+			} else if (key === "ArrowDown" && selectIndex < ledgers.length - 1) {
+				setSelectIndex((prev) => prev + 1);
+			} else if (key === "Enter") {
+				e.preventDefault();
+				onSelect(item[selectIndex].ledger, rowIndex);
 			}
 		}
-	}
-	const onSelect = (item, rowIndex)=>{
-		const updated = [...supplier]
+	};
+	const onSelect = (item, rowIndex) => {
+		const updated = [...supplier];
 		updated[rowIndex].name = item;
-		setSupplier(updated)
-		setShowLedger(false)
-		setSelectIndex(0)
-    if (item === "♦ End of List") {
-			narrationRef.current?.focus();
-		} else {
-      inputRefs.current[rowIndex * 2 + 1]?.focus();
-    }
-
-	}
-	const handleTotal = ()=>{
-		const tot = supplier.reduce((sum, curr)=> sum + parseFloat(curr.amount.replace(/,/g, '') || 0),0)
-		setTotal(tot)
-	}
-  const HandleAccountSelect = (e, item)=>{
+		setSupplier(updated);
+		setShowLedger(false);
+		setSelectIndex(0);
+        if(item !== '♦ End of List')
+            inputRefs.current[rowIndex * 2 + 1]?.focus();
+        else {
+            const updated = supplier.filter((_, index) => index !== rowIndex)
+            setSupplier(updated);
+            narrationRef.current?.focus()
+        }
+	};
+	const HandleAccountSelect = (e, item) => {
 		const key = e.key;
-		if(selectIndex < accountLedger.length){
-			if(key === 'ArrowUp' && selectIndex > 0){
-				setSelectIndex(prev => prev - 1);
-			} else if(key === 'ArrowDown' && selectIndex < accountLedger.length - 1){
-				setSelectIndex(prev => prev + 1);
-			} else if(key === 'Enter'){
-				e.preventDefault()
-				accountSelector(item[selectIndex].ledger)
+		if (selectIndex < accountLedger.length) {
+			if (key === "ArrowUp" && selectIndex > 0) {
+				setSelectIndex((prev) => prev - 1);
+			} else if (
+				key === "ArrowDown" &&
+				selectIndex < accountLedger.length - 1
+			) {
+				setSelectIndex((prev) => prev + 1);
+			} else if (key === "Enter") {
+				e.preventDefault();
+				accountSelector(item[selectIndex].ledger);
 			}
 		}
-	}
-	const accountSelector = (item)=>{
+	};
+	const accountSelector = (item) => {
 		setAccountName(item);
 		setshowAccountLedger(false);
 		inputRefs.current[0]?.focus();
 		setSelectIndex(0);
-	}
+	};
+	const handleTotal = () => {
+		const tot = supplier.reduce(
+			(sum, curr) => sum + parseFloat(curr.amount.replace(/,/g, "") || 0),
+			0
+		);
+		setTotal(tot);
+	};
+
 	return (
 		<>
-			<div className="bg-sky-50 h-screen w-full">
+			<div className="bg-[#fffaf4] h-screen w-full">
 				<Title title="Accounting Voucher Creation" nav={"/"} />
 				<div className="relative">
 					<div className="flex justify-between border-b border-slate-300 ">
 						<div className="w-1/2">
 							<div className=" pt-2 flex">
-								<label className="bg-[#2a67b1] text-center text-[13px] text-white font-semibold h-[19px] w-32">
-									Receipt
+								<label className="bg-[#2a67b1] text-center text-[13px] text-white font-semibold  h-[19px] w-32">
+									Contra
 								</label>
 								<span className="text-[14px] font-semibold">
 									&nbsp;No.&nbsp;&nbsp;1
@@ -200,46 +186,48 @@ const Receipt = () => {
 									<div className="mr-1">:</div>
 									<input
 										ref={acountRef}
-										name="account"
-										autoComplete="on"
-										onChange={(e)=> setAccountName(e.target.value)}
+										name="accountName"
+										autoFocus="on"
+										onChange={(e) => {
+											setAccountName(e.target.value);
+										}}
 										value={accountName}
 										type="text"
-										autoFocus
-										onKeyDown={(e)=> HandleAccountSelect(e, accountLedger)}
+										onKeyDown={(e) => HandleAccountSelect(e, accountLedger)}
 										onFocus={() => setshowAccountLedger(true)}
 										onBlur={() => setshowAccountLedger(false)}
 										id="account"
 										className="w-96 border border-transparent focus:bg-[#fee8af] focus:border-blue-500  text-[13px] pl-0.5 bg-transparent outline-0 font-semibold"
 									/>
-                  {showAccountLedger && (
-													<div className="absolute top-0 right-0 w-64 bg-[#def1fc] h-[625px] border border-slate-500 overflow-y-auto">
-													<div className="sticky top-0 bg-[#def1fc]">
-														<h1 className="bg-[#2a67b1] text-white pl-2 text-[13px]  top-0">
-															List of Ledger Accounts
-														</h1>
-														
-															<button className="w-full text-right text-[14px] mt-3 pr-2 border-b border-slate-500">
-																Create
-															</button>
-														</div>
-														<ul
-															onMouseDown={(e) => e.preventDefault()}
-															tabIndex="-1"
-														>
-															{accountLedger.map((item, ind) => (
-																<li
-																	key={ind}
-																	tabIndex="0"
-																	className={`px-2 h-[17px] flex justify-between items-center py-0.5 cursor-pointer text-sm ${selectIndex === ind ? "bg-amber-400":""}`}
-																	onClick={() => accountSelector(item.ledger)}
-																>
-																	{item.ledger}
-																</li>
-															))}
-														</ul>
-													</div>
-												)}
+									{showAccountLedger && (
+										<div className="absolute top-0 right-0 w-64 bg-[#def1fc] h-[625px] border border-slate-500 overflow-y-auto">
+											<div className="sticky top-0 bg-[#def1fc]">
+												<h1 className="bg-[#2a67b1] text-white pl-2 text-[13px]  top-0">
+													List of Ledger Accounts
+												</h1>
+
+												<button className="w-full text-right text-[14px] mt-3 pr-2 border-b border-slate-500">
+													Create
+												</button>
+											</div>
+											<ul onMouseDown={(e) => e.preventDefault()} tabIndex="-1">
+												{accountLedger.map((item, ind) => (
+													<li
+														key={ind}
+														tabIndex="0"
+														className={`px-2 h-[17px] flex justify-between items-center py-0.5 cursor-pointer text-sm ${
+															selectIndex === ind ? "bg-amber-400" : ""
+														}`}
+														onClick={() => {
+															setAccountName(item.ledger);
+														}}
+													>
+														{item.ledger}
+													</li>
+												))}
+											</ul>
+										</div>
+									)}
 								</div>
 								<div className="flex leading-4 px-1 my-0.5">
 									<label
@@ -248,7 +236,7 @@ const Receipt = () => {
 									>
 										Current balance
 									</label>
-									<div className="mr-0.5 text-slate-500 italic">:</div>
+									<div className="mr-0.5 text-slate-500">:</div>
 								</div>
 							</div>
 						</div>
@@ -292,19 +280,19 @@ const Receipt = () => {
 														(inputRefs.current[index * 2 + 0] = input)
 													}
 													onKeyDown={(e) => {
-														handleSelect(e, index, display)
+														handleSelect(e, index, display);
 													}}
 													onFocus={() => setShowLedger(true)}
 													onChange={(e) => inputChangeHandler(e, index)}
 													className="outline-0 bg-transparent pl-0.5 focus:border-blue-500 focus:border focus:bg-amber-200 border border-transparent font-semibold w-80"
 												/>
 												{showLedger && (
-													<div className="absolute top-0 right-0 w-64 bg-[#def1fc] h-[625px]">
-                          <div className="w-full sticky top-0 ">
-														<h1 className="bg-[#2a67b1] text-white pl-2 text-[13px] ">
-															List of Ledger Accounts
-														</h1>
-														
+													<div className="absolute top-0 right-0 w-64 bg-[#def1fc] h-[625px] border border-slate-500 overflow-y-auto">
+														<div className="sticky top-0 bg-[#def1fc]">
+															<h1 className="bg-[#2a67b1] text-white pl-2 text-[13px]  top-0">
+																List of Ledger Accounts
+															</h1>
+
 															<button className="w-full text-right text-[14px] mt-3 pr-2 border-b border-slate-500">
 																Create
 															</button>
@@ -317,7 +305,9 @@ const Receipt = () => {
 																<li
 																	key={ind}
 																	tabIndex="0"
-																	className={`px-2 h-[17px] flex justify-between items-center py-0.5 cursor-pointer text-sm ${selectIndex === ind ? "bg-amber-400":""}`}
+																	className={`px-2 h-[17px] flex justify-between items-center py-0.5 cursor-pointer text-sm ${
+																		selectIndex === ind ? "bg-amber-400" : ""
+																	}`}
 																	onClick={() => onSelect(item.ledger, index)}
 																>
 																	{item.ledger}
@@ -328,7 +318,8 @@ const Receipt = () => {
 												)}
 											</td>
 											<td className="text-right">
-												<input
+                                            {
+                                                item.name !== "♦ End of List" ? (<input
 													type="text"
 													name="amount"
 													onChange={(e) => inputChangeHandler(e, index)}
@@ -340,19 +331,21 @@ const Receipt = () => {
 														inputFocusKey(e, index, 1);
 														if (e.key === "Enter")
 															if (e.target.value.trim() !== "") {
-																setIsOpen(true);
+																// setIsOpen(true);
 															}
 													}}
 													onBlur={(e) => {
 														handleAmountBlur(index);
 														numberFormat(e, index);
-														handleTotal()
+														handleTotal();
 													}}
 													onFocus={() => {
 														setFocusedIndex(index);
 													}}
 													className="outline-0 bg-transparent pr-0.5 focus:border-blue-500 focus:border focus:bg-amber-200 border border-transparent font-semibold w-24 text-right"
-												/>
+												/>) : ("")
+                                            }
+												
 											</td>
 										</tr>
 										{nameBlurred[index] && (
@@ -370,7 +363,7 @@ const Receipt = () => {
 								))}
 							</tbody>
 						</table>
-						{isOpen && (
+						{/* {isOpen && (
 							<PaySub
 								data={supplier}
 								setData={setSupplier}
@@ -378,7 +371,7 @@ const Receipt = () => {
 								focusedIndex={focusedIndex}
 								isOpen={setIsOpen}
 							/>
-						)}
+						)} */}
 					</div>
 				</div>
 				<div className="flex">
@@ -386,18 +379,23 @@ const Receipt = () => {
 						<label htmlFor="">Narration:</label>
 						<textarea
 							ref={narrationRef}
+							name="narration"
 							type="text"
+							value={narration}
+							onChange={(e) => setNarration(e.target.value)}
 							maxLength={280}
-              name="narration"
-              value={narration}
-              onChange={(e)=> setNarration(e.target.value)}
 							className="w-[60%] outline-0 bg-transparent focus:border focus:border-blue-500 focus:bg-amber-200 h-[62px] text-[13px] resize-none"
 						/>
 					</div>
 					<div className="text-right w-[15%]">
 						<div>
 							<h1 className="text-[14px] font-semibold border-t border-double border-b-4 border-slate-400 pr-0.5 h-6">
-								{total ? new Intl.NumberFormat('en-IN',{minimumFractionDigits:2,maximumFractionDigits:2}).format(total) : ""}
+								{total
+									? new Intl.NumberFormat("en-IN", {
+											minimumFractionDigits: 2,
+											maximumFractionDigits: 2,
+									}).format(total)
+									: ""}
 							</h1>
 						</div>
 					</div>
@@ -407,4 +405,4 @@ const Receipt = () => {
 	);
 };
 
-export default Receipt;
+export default Contra;

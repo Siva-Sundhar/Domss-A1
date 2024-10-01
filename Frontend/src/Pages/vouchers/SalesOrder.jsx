@@ -236,255 +236,257 @@ const SalesOrder = () => {
 		handleTotalQty();
 		handleTotalAmount();
 	},[])
-	console.log(totalQuantity)
+
 	
 	return (
 		<>
-			<Title title="Order Voucher Creation" nav="/" />
-			<form action="" className="relative" onSubmit={(e) => e.preventDefault()}>
-				<Header
-					title="Sales Order"
-					inputRefs={inputRefs}
-					data={headerData}
-					setData={setHeaderData}
-					tableRefs={tableRefs}
-				/>
-				<div className="h-[72vh] overflow-auto">
-					<table>
-						<thead className=" bg-[#F9F3CC] text-[12px] border border-slate-300 font-semibold sticky top-0">
-							<tr className="h-[17px] leading-4 border border-slate-300">
-								<th className="w-[45px] text-center border border-slate-300">
-									S.No
-								</th>
-								<th className="w-[100px] text-center border border-slate-300">
-									Product Code
-								</th>
-								<th className="w-[420px] text-center border border-slate-300">
-									Item Name
-								</th>
-								<th className="w-[60px] text-center border border-slate-300">
-									Due on
-								</th>
-								<th className="w-[70px] text-center border border-slate-300">
-									Quantity
-								</th>
-								<th className="w-[90px] text-right border border-slate-300">
-									Rate
-								</th>
-								<th className="w-[50px] text-center border border-slate-300">
-									Per
-								</th>
-								<th className="w-[70px] text-center border border-slate-300">
-									Discount
-								</th>
-								<th className="w-[70px] text-center border border-slate-300">
-									Tax %
-								</th>
-								<th className="w-[103px] text-right border border-slate-300">
-									Amount
-								</th>
-							</tr>
-						</thead>
-						<tbody>
-							{tableData.map((item, rowIndex) => (
-								<tr className=" text-[13px] h-[17px] leading-4" key={rowIndex}>
-									<td className="text-center border border-slate-300 bg-white">
-										{rowIndex + 1}
-									</td>
-									<td className="text-center border border-slate-300 bg-white">
-										<input
-											ref={(input) =>
-												(tableRefs.current[rowIndex * 2 + 0] = input)
-											}
-											onChange={(e) => handleInputChange(e, rowIndex)}
-											type="text"
-											className="w-full outline-0 focus:bg-amber-300"
-											name="productCode"
-											value={item.productCode}
-											onKeyDown={(e) => handleSelect(e, display, rowIndex)}
-											onFocus={() => {
-												setShowProduct(true);
-												setFocusedRow(rowIndex);
-											}}
-											onBlur={() => setShowProduct(false)}
-										/>
-										{showProduct && (
-											<SelectArea
-												title="List of Stock Items"
-												selectIndex={selectedProduct}
-												data={display}
-												onHandle={onSelected}
-												allocations={item.allocation}
-												extraParams={rowIndex}
-											/>
-										)}
-									</td>
-
-									<td className=" border border-slate-300 bg-white">
-										{/* <input
-											onChange={(e) => handleInputChange(e, rowIndex)}
-											type="text"
-											className="w-full outline-0"
-											name="description"
-											value={item.description}
-											ref={(input) =>
-												(tableRefs.current[rowIndex * 9 + 1] = input)
-											}
-											onKeyDown={(e) => handleKeyDown(e, rowIndex, 1)}
-										/> */}
-										{item.description}
-									</td>
-									<td className="text-center border border-slate-300 bg-white">
-										{/* <input
-											ref={(input) =>
-												(tableRefs.current[rowIndex * 9 + 2] = input)
-											}
-											onChange={(e) => handleInputChange(e, rowIndex)}
-											type="text"
-											className="w-full outline-0 text-center"
-											name="dueOn"
-											value={item.dueOn}
-											onKeyDown={(e) => handleKeyDown(e, rowIndex, 2)}
-										/> */}
-										{item.dueOn}
-									</td>
-									<td className="text-center border border-slate-300 bg-white">
-										{/* <input
-											ref={(input) =>
-												(tableRefs.current[rowIndex * 9 + 3] = input)
-											}
-											onChange={(e) => handleInputChange(e, rowIndex)}
-											className="w-full outline-0 text-right"
-											type="text"
-											name="quantity"
-											value={item.quantity}
-											onKeyDown={(e) => handleKeyDown(e, rowIndex, 3)}
-										/> */}
-										{item.quantity}
-									</td>
-									<td className="text-right border border-slate-300 bg-white">
-										{/* <input
-											onChange={(e) => handleInputChange(e, rowIndex)}
-											className="w-full outline-0 text-right"
-											type="text"
-											name="rate"
-											value={item.rate}
-											ref={(input) =>
-												(tableRefs.current[rowIndex * 9 + 4] = input)
-											}
-											onKeyDown={(e) => handleKeyDown(e, rowIndex, 4)}
-										/> */}
-										{item.rate}
-									</td>
-									<td className="text-center border border-slate-300 bg-white">
-										{/* <input
-											onChange={(e) => handleInputChange(e, rowIndex)}
-											className="w-full outline-0"
-											type="text"
-											name="uom"
-											value={item.uom}
-											ref={(input) =>
-												(tableRefs.current[rowIndex * 9 + 5] = input)
-											}
-											onKeyDown={(e) => handleKeyDown(e, rowIndex, 5)}
-										/> */}
-										{item.uom}
-									</td>
-									<td className="text-center border border-slate-300 bg-white">
-										{/* <input
-											onChange={(e) => handleInputChange(e, rowIndex)}
-											className="w-full outline-0"
-											type="text"
-											name="discount"
-											value={item.discount}
-											ref={(input) =>
-												(tableRefs.current[rowIndex * 9 + 6] = input)
-											}
-											onKeyDown={(e) => handleKeyDown(e, rowIndex, 6)}
-										/> */}
-										{item.discount ? item.discount + " %" : ""}
-									</td>
-									<td className="text-center border border-slate-300 bg-white">
-										{/* <input
-											onChange={(e) => handleInputChange(e, rowIndex)}
-											className="w-full outline-0"
-											type="text"
-											name="tax"
-											value={item.tax}
-											ref={(input) =>
-												(tableRefs.current[rowIndex * 9 + 7] = input)
-											}
-											onKeyDown={(e) => handleKeyDown(e, rowIndex, 7)}
-										/> */}
-										{item.tax ? item.tax + " %" : ""}
-									</td>
-									<td className=" border border-slate-300 bg-white cursor-default">
-										<input
-											onChange={(e) => handleInputChange(e, rowIndex)}
-											className="w-full outline-0 text-right focus:bg-amber-300"
-											type="text"
-											name="amount"
-											value={item.amount}
-											ref={(input) =>
-												(tableRefs.current[rowIndex * 2 + 1] = input)
-											}
-											onKeyDown={(e) => handleKeyDown(e, rowIndex, 1)}
-											readOnly
-										/>
-									</td>
+			<div className="w-full h-screen">
+				<Title title="Order Voucher Creation" nav="/" />
+				<form action="" className="relative" onSubmit={(e) => e.preventDefault()}>
+					<Header
+						title="Sales Order"
+						inputRefs={inputRefs}
+						data={headerData}
+						setData={setHeaderData}
+						tableRefs={tableRefs}
+					/>
+					<div className="h-[72vh] overflow-auto">
+						<table>
+							<thead className=" bg-[#F9F3CC] text-[12px] border border-slate-300 font-semibold sticky top-0">
+								<tr className="h-[17px] leading-4 border border-slate-300">
+									<th className="w-[45px] text-center border border-slate-300">
+										S.No
+									</th>
+									<th className="w-[100px] text-center border border-slate-300">
+										Product Code
+									</th>
+									<th className="w-[420px] text-center border border-slate-300">
+										Item Name
+									</th>
+									<th className="w-[60px] text-center border border-slate-300">
+										Due on
+									</th>
+									<th className="w-[70px] text-center border border-slate-300">
+										Quantity
+									</th>
+									<th className="w-[90px] text-right border border-slate-300">
+										Rate
+									</th>
+									<th className="w-[50px] text-center border border-slate-300">
+										Per
+									</th>
+									<th className="w-[70px] text-center border border-slate-300">
+										Discount
+									</th>
+									<th className="w-[70px] text-center border border-slate-300">
+										Tax %
+									</th>
+									<th className="w-[103px] text-right border border-slate-300">
+										Amount
+									</th>
 								</tr>
-							))}
-						</tbody>
-					</table>
+							</thead>
+							<tbody>
+								{tableData.map((item, rowIndex) => (
+									<tr className=" text-[13px] h-[17px] leading-4" key={rowIndex}>
+										<td className="text-center border border-slate-300 bg-white">
+											{rowIndex + 1}
+										</td>
+										<td className="text-center border border-slate-300 bg-white">
+											<input
+												ref={(input) =>
+													(tableRefs.current[rowIndex * 2 + 0] = input)
+												}
+												onChange={(e) => handleInputChange(e, rowIndex)}
+												type="text"
+												className="w-full outline-0 focus:bg-amber-300"
+												name="productCode"
+												value={item.productCode}
+												onKeyDown={(e) => handleSelect(e, display, rowIndex)}
+												onFocus={() => {
+													setShowProduct(true);
+													setFocusedRow(rowIndex);
+												}}
+												onBlur={() => setShowProduct(false)}
+											/>
+											{showProduct && (
+												<SelectArea
+													title="List of Stock Items"
+													selectIndex={selectedProduct}
+													data={display}
+													onHandle={onSelected}
+													allocations={item.allocation}
+													extraParams={rowIndex}
+												/>
+											)}
+										</td>
 
-					{showSubForm && (
-						<HierarchyTable
-							isClose={setShowSubForm}
-							selectionItem={selectionItem}
-							orderData={tableData}
-							setOrderData={setTableData}
-							allocation={tableData[focusedRow].allocation}
-							row={focusedRow}
-							afterAllocation={afterAllocation}
-						/>
-					)}
-				</div>
-				<div className="w-[1078px] flex justify-end">
-					<div className="border-double border-t border-b-4 border-slate-400 h-[22px] w-[550px] flex items-center">
-						<span>{totalQuantity}</span>
-						<span>{totalAmount}</span>
+										<td className=" border border-slate-300 bg-white">
+											{/* <input
+												onChange={(e) => handleInputChange(e, rowIndex)}
+												type="text"
+												className="w-full outline-0"
+												name="description"
+												value={item.description}
+												ref={(input) =>
+													(tableRefs.current[rowIndex * 9 + 1] = input)
+												}
+												onKeyDown={(e) => handleKeyDown(e, rowIndex, 1)}
+											/> */}
+											{item.description}
+										</td>
+										<td className="text-center border border-slate-300 bg-white">
+											{/* <input
+												ref={(input) =>
+													(tableRefs.current[rowIndex * 9 + 2] = input)
+												}
+												onChange={(e) => handleInputChange(e, rowIndex)}
+												type="text"
+												className="w-full outline-0 text-center"
+												name="dueOn"
+												value={item.dueOn}
+												onKeyDown={(e) => handleKeyDown(e, rowIndex, 2)}
+											/> */}
+											{item.dueOn}
+										</td>
+										<td className="text-center border border-slate-300 bg-white">
+											{/* <input
+												ref={(input) =>
+													(tableRefs.current[rowIndex * 9 + 3] = input)
+												}
+												onChange={(e) => handleInputChange(e, rowIndex)}
+												className="w-full outline-0 text-right"
+												type="text"
+												name="quantity"
+												value={item.quantity}
+												onKeyDown={(e) => handleKeyDown(e, rowIndex, 3)}
+											/> */}
+											{item.quantity}
+										</td>
+										<td className="text-right border border-slate-300 bg-white">
+											{/* <input
+												onChange={(e) => handleInputChange(e, rowIndex)}
+												className="w-full outline-0 text-right"
+												type="text"
+												name="rate"
+												value={item.rate}
+												ref={(input) =>
+													(tableRefs.current[rowIndex * 9 + 4] = input)
+												}
+												onKeyDown={(e) => handleKeyDown(e, rowIndex, 4)}
+											/> */}
+											{item.rate}
+										</td>
+										<td className="text-center border border-slate-300 bg-white">
+											{/* <input
+												onChange={(e) => handleInputChange(e, rowIndex)}
+												className="w-full outline-0"
+												type="text"
+												name="uom"
+												value={item.uom}
+												ref={(input) =>
+													(tableRefs.current[rowIndex * 9 + 5] = input)
+												}
+												onKeyDown={(e) => handleKeyDown(e, rowIndex, 5)}
+											/> */}
+											{item.uom}
+										</td>
+										<td className="text-center border border-slate-300 bg-white">
+											{/* <input
+												onChange={(e) => handleInputChange(e, rowIndex)}
+												className="w-full outline-0"
+												type="text"
+												name="discount"
+												value={item.discount}
+												ref={(input) =>
+													(tableRefs.current[rowIndex * 9 + 6] = input)
+												}
+												onKeyDown={(e) => handleKeyDown(e, rowIndex, 6)}
+											/> */}
+											{item.discount ? item.discount + " %" : ""}
+										</td>
+										<td className="text-center border border-slate-300 bg-white">
+											{/* <input
+												onChange={(e) => handleInputChange(e, rowIndex)}
+												className="w-full outline-0"
+												type="text"
+												name="tax"
+												value={item.tax}
+												ref={(input) =>
+													(tableRefs.current[rowIndex * 9 + 7] = input)
+												}
+												onKeyDown={(e) => handleKeyDown(e, rowIndex, 7)}
+											/> */}
+											{item.tax ? item.tax + " %" : ""}
+										</td>
+										<td className=" border border-slate-300 bg-white cursor-default">
+											<input
+												onChange={(e) => handleInputChange(e, rowIndex)}
+												className="w-full outline-0 text-right focus:bg-amber-300"
+												type="text"
+												name="amount"
+												value={item.amount}
+												ref={(input) =>
+													(tableRefs.current[rowIndex * 2 + 1] = input)
+												}
+												onKeyDown={(e) => handleKeyDown(e, rowIndex, 1)}
+												readOnly
+											/>
+										</td>
+									</tr>
+								))}
+							</tbody>
+						</table>
+
+						{showSubForm && (
+							<HierarchyTable
+								isClose={setShowSubForm}
+								selectionItem={selectionItem}
+								orderData={tableData}
+								setOrderData={setTableData}
+								allocation={tableData[focusedRow].allocation}
+								row={focusedRow}
+								afterAllocation={afterAllocation}
+							/>
+						)}
 					</div>
-				</div>
-				<div className="flex justify-between ">
-					<div className=" flex flex-col">
-						<label htmlFor="narration" className="text-[14px] pl-1">
-							Narration :
-						</label>
-						<textarea
-							// type="text"
-							ref={(el) => (inputRefs.current[2] = el)}
-							name="narration"
-							value={narration}
-							onChange={(e) => setNarration(e.target.value)}
-							onKeyDown={(e) => {
-								if (e.key === "Enter") {
-									e.preventDefault();
-									const confirmed = window.confirm("Do you want Confirm...");
-									if (confirmed) {
-										handleFormSubmit();
-									}
-								} else if (e.key === "Backspace") {
-									if (inputRefs.current[2].value === "") {
-										console.log();
-									}
-								}
-							}}
-							className="h-[36px] text-[13px] resize-none focus:bg-[#fee8af] overflow-hidden outline-0 focus:border focus:border-blue-400 w-[700px]"
-							rows={1}
-						/>
+					<div className="w-[1078px] flex justify-end">
+						<div className="border-double border-t border-b-4 border-slate-400 h-[22px] w-[550px] flex items-center">
+							<span>{totalQuantity}</span>
+							<span>{totalAmount}</span>
+						</div>
 					</div>
-				</div>
-			</form>
+					<div className="flex justify-between ">
+						<div className=" flex flex-col">
+							<label htmlFor="narration" className="text-[14px] pl-1">
+								Narration :
+							</label>
+							<textarea
+								// type="text"
+								ref={(el) => (inputRefs.current[2] = el)}
+								name="narration"
+								value={narration}
+								onChange={(e) => setNarration(e.target.value)}
+								onKeyDown={(e) => {
+									if (e.key === "Enter") {
+										e.preventDefault();
+										const confirmed = window.confirm("Do you want Confirm...");
+										if (confirmed) {
+											handleFormSubmit();
+										}
+									} else if (e.key === "Backspace") {
+										if (inputRefs.current[2].value === "") {
+											console.log();
+										}
+									}
+								}}
+								className="h-[36px] text-[13px] resize-none focus:bg-[#fee8af] overflow-hidden outline-0 focus:border focus:border-blue-400 w-[700px] bg-transparent"
+								rows={1}
+							/>
+						</div>
+					</div>
+				</form>
+			</div>
 		</>
 	);
 };

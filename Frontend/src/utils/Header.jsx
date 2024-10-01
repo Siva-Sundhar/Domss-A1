@@ -144,7 +144,7 @@ const Header = ({ title, inputRefs, data, setData, tableRefs}) => {
 									}
 								}
 							}}
-							className="outline-0 border border-transparent font-semibold pl-0.5 h-[18px] focus:bg-[#fee8af] focus:border focus:border-blue-500 text-[13px]"
+							className="outline-0 border border-transparent font-semibold pl-0.5 h-[18px] focus:bg-[#fee8af] focus:border focus:border-blue-500 text-[13px] bg-transparent"
 						/>
 					</div>
 				</div>

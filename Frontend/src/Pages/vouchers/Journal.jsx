@@ -3,7 +3,7 @@ import Title from "../../utils/Title";
 import SubForm from "../SubForm";
 
 const Journal = () => {
-
+	const crRef = useRef([]);
 	const partyRef = useRef([])
 	const debitRef = useRef([])
 	const creditRef = useRef([])
@@ -74,6 +74,7 @@ const Journal = () => {
         updated[index].name = item
         setInputData(updated);
         setShowPartyLedger(false)
+		setSelectIndex(0)
     }
 	const numberFormat = (e, index )=>{
 		const {value, name} = e.target;
@@ -116,9 +117,9 @@ const Journal = () => {
 					},
 				],
 			},
-		])
+		]);
 		setTimeout(()=>{
-			partyRef.current[inputData.length + 1]?.focus();
+			crRef.current[inputData.length]?.focus();
 		},0)
 	}
 	const totalCreditCalculation = () => {
@@ -145,13 +146,25 @@ const Journal = () => {
 			}).format(total)
 		);
 	};
-	const handleSuggestion = 
+	const handleSuggestion = (e, index, item)=>{
+		const key = e.key
+		if(selectIndex < drCr.length){
+			if(key === 'ArrowDown' && selectIndex < drCr.length - 1){
+				setSelectIndex((prev)=> prev + 1)
+			} else if(key === 'ArrowUp' && selectIndex > 0){
+				setSelectIndex((prev)=> prev - 1)
+			} else if(key === 'Enter'){
+				onSuggestionSelect(item[selectIndex], index)
+			}
+		}
+	}
 	const onSuggestionSelect = (item, index)=>{
 		const updated = [...inputData]
 		updated[index].creditOrDebit = item;
+		updated[index].billWise.forEach(bill=> bill.creditOrDebit = item)
 		setInputData(updated);
 		setShowAgainst(false)
-		partyRef.current[index * 2 + 1]?.focus()
+		partyRef.current[index ]?.focus()
 	}
 	const suggestion = (index) => {
 		return (
@@ -184,7 +197,7 @@ const Journal = () => {
 	};
 	return (
 		<>
-			<div className="h-screen">
+			<div className="h-screen w-full">
 				<Title title="Accounting Voucher Creation" nav={"/"} />
 				<div className="relative">
 					<div className="flex justify-between border-b border-slate-300 min-h-16 ">
@@ -242,7 +255,7 @@ const Journal = () => {
 														onKeyDown={(e)=> handleSuggestion(e, rowIndex, drCr)}
 														onBlur={() => setShowAgainst(false)}
 														ref={(par) =>
-															(partyRef.current[rowIndex * 2 + 0] = par)
+															(crRef.current[rowIndex * 1 + 0] = par)
 														}
 														className="w-6 border border-transparent outline-0 focus:bg-amber-200 focus:border focus:border-blue-500 pl-0.5"
 													/>
@@ -256,7 +269,7 @@ const Journal = () => {
 													className="w-96 border border-transparent outline-0 focus:bg-amber-200 focus:border focus:border-blue-500 pl-0.5 font-semibold"
 													name="name"
 													ref={(par) =>
-														(partyRef.current[rowIndex * 2 + 1] = par)
+														(partyRef.current[rowIndex * 1 + 0] = par)
 													}
 													value={item.name}
 													onFocus={() => {

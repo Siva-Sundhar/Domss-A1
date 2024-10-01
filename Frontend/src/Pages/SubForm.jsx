@@ -5,7 +5,7 @@ import PropTypes from "prop-types";
 const SubForm = ({
 	data,
 	setData,
-	inputRef,
+	// inputRef,
 	focusedIndex,
 	isOpen,
 	addNewRow,

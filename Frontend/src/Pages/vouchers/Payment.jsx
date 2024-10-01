@@ -3,7 +3,6 @@ import Title from "../../utils/Title.jsx";
 import React, { useRef, useState } from "react";
 import PaySub from "../PaySub.jsx";
 
-
 const Payment = () => {
 	const acountRef = useRef(null);
 	const narrationRef = useRef(null);
@@ -146,8 +145,15 @@ const Payment = () => {
 		updated[rowIndex].name = item;
 		setSupplier(updated);
 		setShowLedger(false);
+		if(item !== "♦ End of List"){
+			inputRefs.current[rowIndex * 2 + 1]?.focus();
+		} else {
+			const updated = supplier.filter((_, index) => index !== rowIndex)
+            setSupplier(updated);
+            narrationRef.current?.focus();
+		}
 		setSelectIndex(0);
-		inputRefs.current[rowIndex * 2 + 1]?.focus();
+		
 	};
 	const HandleAccountSelect = (e, item) => {
 		const key = e.key;
@@ -181,7 +187,7 @@ const Payment = () => {
 
 	return (
 		<>
-			<div className="bg-[#fffaf4] h-screen">
+			<div className="bg-[#fffaf4] h-screen w-full">
 				<Title title="Accounting Voucher Creation" nav={"/"} />
 				<div className="relative">
 					<div className="flex justify-between border-b border-slate-300 ">
